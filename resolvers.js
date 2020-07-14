@@ -1,5 +1,7 @@
+const db = require("./db");
+
 const Query = {
   test: () => "Test Success, GraphQL server is up & running !!",
-  child: () => "We are here to rule the night",
+  students: () => db.students.list(),
 };
 module.exports = { Query };

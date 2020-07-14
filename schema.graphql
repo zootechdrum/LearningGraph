@@ -1,4 +1,12 @@
 type Query {
   test: String
-  child: String
+  students: [Student]
+}
+
+type Student {
+  id: ID!
+  firstName: String
+  lastName: String
+  password: String
+  collegeId: String
 }
