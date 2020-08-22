@@ -2,18 +2,41 @@ import { GraphQLServer } from "graphql-yoga";
 
 const typeDefs = `
 type Query {
-    hello: String!
-    name: String!
-}`;
+me: User!
+post: Post!
+}
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  published: String!
+}
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+}
+`;
 
 //Resolvers
 const resolvers = {
   Query: {
-    hello() {
-      return "This is my first query";
+    me() {
+      return {
+        id: 1,
+        name: "Cesar Gomez",
+        email: "zootechdrumn",
+        age: 4,
+      };
     },
-    name() {
-      return "Cesar Gomez";
+    post() {
+      return {
+        id: 1,
+        title: "Hello",
+        body: "Query",
+        published: "7/7/70",
+      };
     },
   },
 };
