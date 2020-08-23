@@ -23,16 +23,16 @@ const posts = [
 ];
 
 const comments = [
-  { id: "44", text: "hole" },
-  { id: "4", text: "shits" },
-  { id: "6", text: "shits" },
+  { id: "44", text: "hole", author: "1", postId: "1" },
+  { id: "4", text: "shits", author: "2", postId: "2" },
+  { id: "6", text: "I love this shit", postId: "1" },
 ];
 
 const typeDefs = `
 type Query {
   users (query: String): [User]
   posts (query: String): [Post]
-  comments: [!Comment]!
+  comments: [Comment!]!
     me: User! 
     post: Post!
 }
@@ -42,6 +42,7 @@ type Post {
   body: String!
   published: Boolean
   author: User!
+  comments: [Comment]
 }
 type User {
   id: ID!
@@ -49,11 +50,14 @@ type User {
   email: String!
   age: Int
   posts: [Post!]!
+  comments: [Comment]
 }
 
 type Comment {
   id: ID!
   text: String!
+  author: User!
+  post: [Post]
 }
 `;
 
@@ -61,9 +65,7 @@ type Comment {
 const resolvers = {
   Query: {
     comments(parent, args, ctx, info) {
-      if (!args.query) {
-        return comments;
-      }
+      return comments;
     },
     users(parent, args, ctx, info) {
       if (!args.query) {
@@ -104,6 +106,11 @@ const resolvers = {
         return user.id === parent.author;
       });
     },
+    comments(parent, args, ctx, info) {
+      return comments.find((comment) => {
+        return comment.postId === parent.id;
+      });
+    },
   },
   User: {
     posts(parent, args, ctx, info) {
@@ -111,9 +118,25 @@ const resolvers = {
         return post.author === parent.id;
       });
     },
+    comments(parent, args, ctx, info) {
+      return comments.filter((comment) => {
+        return comment.author === parent.id;
+      });
+    },
+  },
+  Comment: {
+    author(parent, args, ctx, info) {
+      return users.find((user) => {
+        return user.id === parent.author;
+      });
+    },
+    post(parent, args, ctx, info) {
+      return posts.filter((post) => {
+        return post.id === parent.postId;
+      });
+    },
   },
 };
-
 const server = new GraphQLServer({ typeDefs, resolvers });
 
 server.start(() => {
