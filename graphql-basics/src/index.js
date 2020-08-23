@@ -18,7 +18,7 @@ const posts = [
     id: "2",
     title: "farts",
     body: "lorem ipsum hdfksjdhsk  dfksjhdfjsk",
-    published: false,
+    published: true,
     author: "2",
   },
 ];
@@ -117,11 +117,10 @@ const resolvers = {
       if (ematilTaken) {
         throw new Error("Email taken.");
       }
+
       const user = {
         id: uuidv4(),
-        name: args.name,
-        email: args.email,
-        age: args.age,
+        ...args,
       };
 
       users.push(user);
@@ -135,10 +134,7 @@ const resolvers = {
 
       const post = {
         id: uuidv4(),
-        title: args.title,
-        body: args.body,
-        published: args.published,
-        author: args.author,
+        ...args,
       };
       posts.push(post);
       return post;
@@ -149,14 +145,11 @@ const resolvers = {
         return user.id === args.author;
       });
       const postExist = posts.some((post) => {
-        return post.id === args.postId;
+        return post.id === args.postId && post.published;
       });
 
       const comment = {
-        id: args.id,
-        text: args.text,
-        author: args.author,
-        postId: args.postId,
+        ...args,
       };
 
       if (!userExist || !postExist) {
