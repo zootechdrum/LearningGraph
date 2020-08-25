@@ -11,4 +11,4 @@ const User = {
   },
 };
 
-export { User as Default };
+export { User as default };

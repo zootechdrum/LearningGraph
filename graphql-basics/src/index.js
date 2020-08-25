@@ -15,6 +15,10 @@ const server = new GraphQLServer({
     Post,
     Comment,
   },
+
+  context: {
+    db,
+  },
 });
 
 server.start(() => {

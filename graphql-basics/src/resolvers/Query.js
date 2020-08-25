@@ -1,5 +1,5 @@
 const Query = {
-  comments(parent, args, ctx, info) {
+  comments(parent, args, { db }, info) {
     return db.comments;
   },
   users(parent, args, { db }, info) {
