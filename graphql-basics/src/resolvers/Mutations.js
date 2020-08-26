@@ -57,7 +57,7 @@ const Mutation = {
       user.email = data.email;
     }
     if (typeof data.name === "string") {
-      user.name = args.data.name;
+      user.name = data.name;
     }
 
     if (typeof data.age !== "undefined") {
@@ -93,6 +93,27 @@ const Mutation = {
       comment.postId !== args.id;
     });
     return deletedPost[0];
+  },
+  updatePost(parent, args, { db }, info) {
+    const { id, data } = args;
+    const post = db.posts.find((post) => post.id === id);
+
+    if (!post) {
+      throw Error("Post does not exist");
+    }
+
+    if (typeof data.title === "string") {
+      post.title = data.title;
+    }
+
+    if (typeof data.body === "string") {
+      post.body = data.body;
+    }
+
+    if (typeof data.published === "boolean") {
+      post.published = data.published;
+    }
+    return post;
   },
 
   createComment(parent, args, ctx, info) {
