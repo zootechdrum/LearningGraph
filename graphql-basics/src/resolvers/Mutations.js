@@ -147,6 +147,17 @@ const Mutation = {
     const comment = db.comments.splice(commentIndex, 1);
     return comment[0];
   },
+  updateComment(parent, { db }, ctx, info) {
+    const { id, data } = args;
+
+    const commentExist = db.comments.some((comment) => {
+      return commment.id === data.id;
+    });
+
+    if (!commentExist) {
+      throw new Error("Comment does not exist");
+    }
+  },
 };
 
 export { Mutation as default };
