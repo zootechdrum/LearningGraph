@@ -74,5 +74,5 @@ type Comment {
 }
 
 input updateCommentInput {
-  text: String!
+  text: String
 }

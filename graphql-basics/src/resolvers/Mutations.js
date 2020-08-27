@@ -147,16 +147,22 @@ const Mutation = {
     const comment = db.comments.splice(commentIndex, 1);
     return comment[0];
   },
-  updateComment(parent, { db }, ctx, info) {
+  updateComment(parent, args, { db }, ctx, info) {
     const { id, data } = args;
 
-    const commentExist = db.comments.some((comment) => {
-      return commment.id === data.id;
+    const comment = db.comments.find((comment) => {
+      return comment.id === id;
     });
 
-    if (!commentExist) {
+    if (!comment) {
       throw new Error("Comment does not exist");
     }
+
+    if (typeof data.text === "string") {
+      comment.text = data.text;
+    }
+
+    return comment;
   },
 };
 
