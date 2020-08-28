@@ -116,7 +116,7 @@ const Mutation = {
     return post;
   },
 
-  createComment(parent, args, ctx, info) {
+  createComment(parent, args, { db, pubsub }, info) {
     const userExist = db.users.some((user) => {
       return user.id === args.data.author;
     });
@@ -124,15 +124,16 @@ const Mutation = {
       return post.id === args.data.postId && post.published;
     });
 
-    const comment = {
-      ...args.data,
-    };
-
     if (!userExist || !postExist) {
       throw new Error("User or Post could not Found");
     }
+    const comment = {
+      id: uuidv4(),
+      ...args.data,
+    };
 
     db.comments.push(comment);
+    pubsub.publish(`comment ${args.data.postId}`, { comment });
     return comment;
   },
   deleteComment(parent, { db }, ctx, info) {
