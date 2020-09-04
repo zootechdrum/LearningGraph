@@ -15,31 +15,36 @@ const prisma = new Prisma({
 
 //prisma.query.posts(null, `{id title}`).then((data) => console.log(data));
 
-prisma.mutation
-  .updatePost(
+const updatePost = async (postId, data) => {
+  const post = await prisma.mutation.updatePost(
     {
       data: {
-        title: "How to use GraphQl",
-        body: " How th fuck do you use this?",
-        published: true,
-        author: {
-          connect: {
-            id: "ckeku0gvp04dg0892drlxt13m",
-          },
-        },
+        ...data,
       },
       where: {
-        id: "ckekgp55e04b60892r06jgs3l",
+        id: postId,
       },
     },
-    `{id title body published}`
-  )
-  .then((data) => {
-    console.log(data);
-    return prisma.query
-      .posts(null, `{id title body published}`)
-      .then((data) => console.log(JSON.stringify(data, undefined, 2)));
-  });
+    `{id title body published author { id }}`
+  );
+  let author = post.author.id;
+
+  const user = await prisma.query.user(
+    {
+      where: { id: author },
+    },
+    `{id name email post { id title published} }`
+  );
+
+  return user;
+};
+
+updatePost(`ckekgp55e04b60892r06jgs3l`, {
+  title: "I dont have time",
+  published: true,
+}).then((user) => {
+  console.log(JSON.stringify(user, undefined, 2));
+});
 
 // prisma.mutation
 //   .createPost(
