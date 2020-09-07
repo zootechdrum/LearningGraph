@@ -1,6 +1,6 @@
 const Query = {
-  comments(parent, args, { db }, info) {
-    return db.comments;
+  comments(parent, args, { prisma }, info) {
+    return prisma.query.comments(null, info);
   },
   users(parent, args, { db, prisma }, info) {
     const opArgs = {};
@@ -18,11 +18,25 @@ const Query = {
       };
     }
 
-    return prisma.query.users(null, info);
+    return prisma.query.users(opArgs, info);
   },
   posts(parent, args, { prisma }, info) {
     const opArgs = {};
-    return prisma.query.posts(null, info);
+
+    if (args.query) {
+      opArgs.where = {
+        OR: [
+          {
+            title_contains: args.query,
+          },
+          {
+            body_contains: args.query,
+          },
+        ],
+      };
+    }
+
+    return prisma.query.posts(opArgs, info);
   },
   me() {
     return {
