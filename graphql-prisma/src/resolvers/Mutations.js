@@ -20,49 +20,29 @@ const Mutation = {
 
     return prisma.mutation.deleteUser({ where: { id: args.id } }, info);
   },
-  updateUser(parent, args, { db }, info) {
-    const { id, data } = args;
-    const user = db.users.find((user) => user.id === id);
-
-    if (!user) {
-      throw new Error("User was not found");
-    }
-
-    if (typeof data.email === "string") {
-      const emailTaken = db.users.some((user) => user.email === data.email);
-      if (emailTaken) {
-        throw new Error("Email Taken");
-      }
-      user.email = data.email;
-    }
-    if (typeof data.name === "string") {
-      user.name = data.name;
-    }
-
-    if (typeof data.age !== "undefined") {
-      user.age == data.age;
-    }
-    return user;
-  },
-  createPost(parent, args, { db, pubsub }, info) {
-    const userExist = db.users.some((user) => user.id === args.data.author);
-    if (!userExist) {
-      throw new Error("User not Found");
-    }
-
-    const post = {
-      id: uuidv4(),
-      ...args.data,
-    };
-    db.posts.push(post);
-    if (args.data.published)
-      pubsub.publish(`post`, {
-        post: {
-          mutation: "CREATED",
-          data: post,
+  updateUser(parent, args, { prisma }, info) {
+    return prisma.mutationn.updateUser(
+      {
+        where: {
+          id: args.id,
         },
-      });
-    return post;
+        data: args.data,
+      },
+      info
+    );
+  },
+  createPost(parent, args, { prisma }, info) {
+    const { title, body, published, author } = args.data;
+
+    return prisma.mutation.createPost({
+      data: {
+        title,
+        body,
+        published,
+        author: { connect: { id: author } },
+      },
+      info,
+    });
   },
 
   deletePost(parent, args, { db, pubsub }, info) {
