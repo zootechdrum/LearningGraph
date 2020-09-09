@@ -45,28 +45,8 @@ const Mutation = {
     });
   },
 
-  deletePost(parent, args, { db, pubsub }, info) {
-    const postIndex = db.posts.findIndex((post) => {
-      return post.id === args.id;
-    });
-
-    if (postIndex === -1) {
-      throw new Error("Post not found");
-    }
-    const [deletedPost] = db.posts.splice(postIndex, 1);
-
-    db.comments = db.comments.filter((comment) => {
-      comment.postId !== args.id;
-    });
-    if (deletedPost.published) {
-      pubsub.publish("post", {
-        post: {
-          mutation: "DELETED",
-          data: deletedPost,
-        },
-      });
-    }
-    return deletedPost;
+  deletePost(parent, args, { prisma }, info) {
+    return prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
   updatePost(parent, args, { db, pubsub }, info) {
     const { id, data } = args;
