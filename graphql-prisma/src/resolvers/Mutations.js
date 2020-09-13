@@ -66,14 +66,20 @@ const Mutation = {
     );
   },
 
-  createComment(parent, args, { db, pubsub }, info) {
+  createComment(parent, args, { prisma }, info) {
+    console.log(args.data);
     return prisma.mutation.createComment(
       {
         data: {
           text: args.data.text,
           author: {
             connect: {
-              id: args.author,
+              id: args.data.author,
+            },
+          },
+          post: {
+            connect: {
+              id: args.data.postId,
             },
           },
         },
