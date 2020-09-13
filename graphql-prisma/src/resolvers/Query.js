@@ -2,7 +2,7 @@ const Query = {
   comments(parent, args, { prisma }, info) {
     return prisma.query.comments(null, info);
   },
-  users(parent, args, { db, prisma }, info) {
+  async users(parent, args, { prisma }, info) {
     const opArgs = {};
 
     if (args.query) {
@@ -18,9 +18,9 @@ const Query = {
       };
     }
 
-    return prisma.query.users(opArgs, info);
+    return await prisma.query.users(opArgs, info);
   },
-  posts(parent, args, { prisma }, info) {
+  async posts(parent, args, { prisma }, info) {
     const opArgs = {};
 
     if (args.query) {
@@ -36,7 +36,7 @@ const Query = {
       };
     }
 
-    return prisma.query.posts(opArgs, info);
+    return await prisma.query.posts(opArgs, info);
   },
   me() {
     return {
