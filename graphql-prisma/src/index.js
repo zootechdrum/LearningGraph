@@ -1,4 +1,4 @@
-import { GraphQLServer, pubSub, PubSub } from "graphql-yoga";
+import { GraphQLServer, PubSub } from "graphql-yoga";
 import Query from "./resolvers/Query";
 import Mutation from "./resolvers/Mutations";
 import Subscription from "./resolvers/Subscription";
