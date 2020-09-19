@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Sep 19 2020 11:42:07 GMT-0700 (Pacific Daylight Time)
+# timestamp: Sat Sep 19 2020 12:24:32 GMT-0700 (Pacific Daylight Time)
 
 type AggregateComment {
   count: Int!
@@ -677,6 +677,7 @@ type Subscription {
 
 type User implements Node {
   id: ID!
+  password: String!
   name: String!
   email: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
@@ -694,6 +695,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  password: String!
   name: String!
   email: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -711,12 +713,14 @@ input UserCreateOneWithoutPostsInput {
 }
 
 input UserCreateWithoutCommentsInput {
+  password: String!
   name: String!
   email: String!
   posts: PostCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutPostsInput {
+  password: String!
   name: String!
   email: String!
   comments: CommentCreateManyWithoutAuthorInput
@@ -734,6 +738,8 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  password_ASC
+  password_DESC
   name_ASC
   name_DESC
   email_ASC
@@ -746,6 +752,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  password: String!
   name: String!
   email: String!
 }
@@ -790,6 +797,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
+  password: String
   name: String
   email: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -813,12 +821,14 @@ input UserUpdateOneWithoutPostsInput {
 }
 
 input UserUpdateWithoutCommentsDataInput {
+  password: String
   name: String
   email: String
   posts: PostUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutPostsDataInput {
+  password: String
   name: String
   email: String
   comments: CommentUpdateManyWithoutAuthorInput
@@ -883,6 +893,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
   name: String
 
   """All values that are not equal to given value."""
