@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const Mutation = {
   async createUser(parent, args, { prisma }, info) {
@@ -23,6 +24,7 @@ const Mutation = {
       info
     );
   },
+  //tihhs is
 
   async deleteUser(parent, args, { prisma }, info) {
     const user = await prisma.exists.User({ id: args.id });
