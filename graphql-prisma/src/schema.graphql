@@ -16,10 +16,10 @@ type Mutation {
   createComment(data: createComment!): Comment!
   deleteComment(id: ID!): Comment!
   updateComment(id: ID!, data: updateCommentInput): Comment!
-  logIn(data: LoginUserInput): AuthPayload!
+  logIn(data: LoginUserInput!): AuthPayload!
 }
 
-type LoginUserInput {
+input LoginUserInput {
   email: String!
   password: String!
 }
