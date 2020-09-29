@@ -32,7 +32,6 @@ type Subscription {
 
 input createComment {
   text: String
-  author: ID!
   postId: ID!
 }
 
