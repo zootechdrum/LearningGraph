@@ -159,7 +159,7 @@ const Mutation = {
       info
     );
   },
-  updateComment(parent, args, { prisma, request }, info) {
+  async updateComment(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
     const commentExists = await prisma.exists.Comment({
