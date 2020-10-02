@@ -22,20 +22,45 @@ const Query = {
 
     return await prisma.query.users(opArgs, info);
   },
+
+  async myPosts(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const opArgs = {
+      where: {
+        author: {
+          id: userId,
+        },
+      },
+    };
+    if (args.query) {
+      opArgs.where.OR = [
+        {
+          title_containes: args.query,
+        },
+        {
+          body_contains: args.query,
+        },
+      ];
+    }
+    return prisma.query.posts(opArgs, query);
+  },
+
   async posts(parent, args, { prisma }, info) {
-    const opArgs = {};
+    const opArgs = {
+      where: {
+        published: true,
+      },
+    };
 
     if (args.query) {
-      opArgs.where = {
-        OR: [
-          {
-            title_contains: args.query,
-          },
-          {
-            body_contains: args.query,
-          },
-        ],
-      };
+      opArgs.where.OR = [
+        {
+          title_contains: args.query,
+        },
+        {
+          body_contains: args.query,
+        },
+      ];
     }
 
     return await prisma.query.posts(opArgs, info);
