@@ -3,6 +3,7 @@ import getUserId from "../utils/getUserId";
 const Query = {
   comments(parent, args, { prisma }, info) {
     const opArgs = {
+      orderBy: args.orderBy,
       after: args.after,
       first: args.first,
       skip: args.skip,
@@ -32,6 +33,7 @@ const Query = {
   async myPosts(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
     const opArgs = {
+      orderBy: args.orderBy,
       after: args.after,
       first: args.first,
       skip: args.skip,
@@ -56,6 +58,7 @@ const Query = {
 
   async posts(parent, args, { prisma }, info) {
     const opArgs = {
+      orderBy: args.orderBy,
       first: args.first,
       skip: args.skip,
       after: args.after,
